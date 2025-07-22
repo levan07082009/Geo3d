@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Cart - 3D Printing Services</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f9f9f9;
+      color: #333;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      background: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 5px rgb(0 0 0 / 0.1);
+      gap: 15px;
+    }
+    .item-image {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 6px;
+      flex-shrink: 0;
+      box-shadow: 0 0 6px rgba(0,0,0,0.12);
+    }
+    .item-info {
+      flex-grow: 1;
+      font-size: 16px;
+      user-select: none;
+    }
+    .item-info strong {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 700;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      padding: 0.4rem 0.8rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s ease;
+    }
+    .plus {
+      background: #28a745;
+      color: white;
+    }
+    .plus:hover {
+      background: #218838;
+    }
+    .minus {
+      background: #ffc107;
+      color: white;
+    }
+    .minus:hover {
+      background: #e0a800;
+    }
+    .remove {
+      background: #dc3545;
+      color: white;
+    }
+    .remove:hover {
+      background: #c82333;
+    }
+    .total {
+      font-weight: bold;
+      font-size: 1.3rem;
+      text-align: right;
+      margin-top: 2rem;
+      user-select: none;
+    }
+    .back-button {
+      display: block;
+      margin: 2rem auto;
+      text-align: center;
+      background-color: #007bff;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      text-decoration: none;
+      user-select: none;
+      width: max-content;
+    }
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your Shopping Cart</h1>
+  <div id="cart-items"></div>
+  <div class="total" id="cart-total">Total: $0.00</div>
+
+  <a href="index.html" class="back-button">Back to Catalog</a>
+
+  <script>
+    let products = [];
+    let prices = [];
+    let productImages = {};
+    let descriptions = {};
+    let galleryImages = {};
+    let trending = [];
+
+    async function loadProductData() {
+      try {
+        const res = await fetch('products.json');
+        if (!res.ok) throw new Error('Failed to load products.json');
+        const data = await res.json();
+
+        products = data.products;
+        prices = data.prices;
+        productImages = data.images;
+        descriptions = data.descriptions;
+        galleryImages = data.gallery;
+        trending = data.trending;
+
+        loadCart();
+        updateCartDisplay();
+      } catch (e) {
+        console.error(e);
+        document.getElementById('cart-items').innerHTML = '<p style="color:red; text-align:center;">Failed to load product data.</p>';
+      }
+    }
+
+    let cart = {};
+
+    function loadCart() {
+      const saved = localStorage.getItem('cart');
+      if (saved) {
+        try {
+          cart = JSON.parse(saved);
+        } catch {
+          cart = {};
+        }
+      }
+    }
+
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    const cartItemsDiv = document.getElementById('cart-items');
+    const cartTotalDiv = document.getElementById('cart-total');
+
+    function updateCartDisplay() {
+      cartItemsDiv.innerHTML = '';
+      let total = 0;
+
+      if (Object.keys(cart).length === 0) {
+        cartItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
+        cartTotalDiv.textContent = 'Total: $0.00';
+        return;
+      }
+
+      for (const key in cart) {
+        const { quantity, price } = cart[key];
+        const index = parseInt(key.replace(/\D/g, ''), 10);
+        const name = products[index] || key;
+        const imgSrc = productImages[name] || `product_images/product${index}.png`;
+        const itemTotal = price * quantity;
+        total += itemTotal;
+
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cart-item';
+        itemDiv.innerHTML = `
+          <img src="${imgSrc}" alt="${name}" class="item-image" />
+          <div class="item-info">
+            <strong>${name}</strong>
+            Price: $${price} × ${quantity} = $${itemTotal.toFixed(2)}
+          </div>
+          <div class="controls">
+            <button class="plus" onclick="changeQuantity('${key}', 1)">+</button>
+            <button class="minus" onclick="changeQuantity('${key}', -1)">−</button>
+            <button class="remove" onclick="removeItem('${key}')">Remove</button>
+          </div>
+        `;
+        cartItemsDiv.appendChild(itemDiv);
+      }
+
+      cartTotalDiv.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    function changeQuantity(key, delta) {
+      if (!cart[key]) return;
+      cart[key].quantity += delta;
+      if (cart[key].quantity <= 0) {
+        delete cart[key];
+      }
+      saveCart();
+      updateCartDisplay();
+    }
+
+    function removeItem(key) {
+      delete cart[key];
+      saveCart();
+      updateCartDisplay();
+    }
+
+    window.changeQuantity = changeQuantity;
+    window.removeItem = removeItem;
+
+    loadProductData();
+  </script>
+</body>
+</html>

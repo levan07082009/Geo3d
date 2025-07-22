@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Page</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    .top-bar { display: flex; justify-content: space-between; padding: 1em; background: #333; color: #fff; }
+    .top-bar a { color: #fff; text-decoration: none; font-weight: bold; }
+    .top-bar .cart-icon { cursor: pointer; }
+    .cart { position: fixed; top: 20px; right: 20px; background: white; border: 1px solid #ddd; padding: 1em;
+            border-radius: 5px; max-width: 320px; z-index: 1000; font-size: 14px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1); display: none; }
+    .cart h3 { margin: 0 0 .5em; font-weight: 700; }
+    .cart-item { display: flex; align-items: center; gap: 8px; margin-bottom:8px; }
+    .cart-item img { width:30px; height:30px; object-fit: contain; border-radius:4px; flex-shrink:0; }
+    .cart-item-name { flex-grow:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer; }
+    .cart-total { font-weight:bold; text-align:right; margin-top:1em; }
+    .product-container { display: flex; gap:20px; padding:2em; max-width:900px; margin:auto; flex-wrap:wrap; }
+    .slider-container { flex:1; min-width:300px; position:relative; }
+    .slider-container img { width:100%; border-radius:8px; display:none; }
+    .slider-container img.active { display:block; }
+    .product-details { flex:1; min-width:250px; }
+    .product-details h2 { margin-top:0; }
+    .product-details button { background:#4caf50; color:#fff; border:none; padding:12px 20px;
+                              border-radius:6px; cursor:pointer; font-weight:bold; margin-top:1em; }
+    .gallery { display:flex; overflow-x:auto; gap:16px; padding:1em 2em; margin-top:2em; border-top:1px solid #ddd; }
+    .gallery-item { flex:0 0 150px; background:#f3f3f3; border-radius:8px; padding:10px;
+                    text-align:center; cursor:pointer; transition:transform .2s; }
+    .gallery-item:hover { transform:scale(1.05); }
+    .gallery-item img { width:100%; height:100px; object-fit:contain; border-radius:4px; }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="index.html">Home</a>
+    <div class="cart-icon" onclick="toggleCart()">🛒 Cart</div>
+  </div>
+
+  <div class="cart" id="cartWindow">
+    <h3>Cart</h3>
+    <div id="cart-items"></div>
+    <div class="cart-total" id="cart-total">Total: $0.00</div>
+  </div>
+
+  <div class="product-container">
+    <div class="slider-container" id="slider-container"></div>
+    <div class="product-details">
+      <h2 id="product-name">Loading...</h2>
+      <div id="product-description"></div>
+      <div><strong>Price:</strong> <span id="product-price"></span> ₾</div>
+      <button onclick="addToCart(productId)">Add to Cart</button>
+    </div>
+  </div>
+
+  <h3 style="text-align:center;">Trending Products</h3>
+  <div class="gallery" id="trending"></div>
+
+<script>
+  let products = [], prices = [], galleryData = {}, descriptions = {}, trendingArr = [];
+  let cart = {}, productId;
+
+  async function loadProductData() {
+    const res = await fetch('products.json');
+    const data = await res.json();
+    products = data.products;
+    prices = data.prices;
+    galleryData = data.gallery;
+    descriptions = data.descriptions;
+    trendingArr = data.trending;
+    loadCart();
+    showProduct();
+    showTrending();
+    updateCartDisplay();
+  }
+
+  function getProductId() {
+    const p = new URLSearchParams(location.search).get('id');
+    return parseInt(p, 10) || 1;
+  }
+  productId = getProductId();
+
+  function showProduct() {
+    const name = products[productId];
+    document.getElementById('product-name').textContent = name;
+    document.getElementById('product-description').textContent = descriptions[name] || '';
+    document.getElementById('product-price').textContent = prices[productId].toFixed(2);
+
+    const slider = document.getElementById('slider-container');
+    slider.innerHTML = '';
+    galleryData[name].forEach((src, idx) => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.className = idx === 0 ? 'active' : '';
+      slider.appendChild(img);
+    });
+    let current = 0, slides = slider.querySelectorAll('img');
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current +1) % slides.length;
+      slides[current].classList.add('active');
+    }, 3000);
+  }
+
+  function showTrending() {
+    const div = document.getElementById('trending');
+    trendingArr.forEach(name => {
+      const index = products.indexOf(name);
+      const imgSrc = galleryData[name][0];
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = `<img src="${imgSrc}"><div>${name}</div><div>${prices[index].toFixed(2)} ₾</div>`;
+      item.onclick = () => { location.href = `product.html?id=${index}`; };
+      div.appendChild(item);
+    });
+  }
+
+  function loadCart() {
+    const saved = localStorage.getItem('cart');
+    cart = saved ? JSON.parse(saved) : {};
+  }
+
+  function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  function addToCart(idx) {
+    const key = `Product ${idx}`;
+    cart[key] ? cart[key].quantity++ : cart[key] = { price: prices[idx], quantity:1 };
+    saveCart();
+    updateCartDisplay();
+  }
+
+  function changeQuantity(key, delta) {
+    if (!cart[key]) return;
+    cart[key].quantity += delta;
+    if (cart[key].quantity <= 0) delete cart[key];
+    saveCart();
+    updateCartDisplay();
+  }
+
+  function removeItem(key) {
+    delete cart[key];
+    saveCart();
+    updateCartDisplay();
+  }
+
+  function updateCartDisplay() {
+    const c = document.getElementById('cart-items'), t = document.getElementById('cart-total');
+    c.innerHTML = ''; let total = 0;
+    for (const key in cart) {
+      const { price, quantity } = cart[key];
+      const idx = parseInt(key.replace(/\D/g,''),10);
+      const name = products[idx];
+      const img = galleryData[name][0];
+      total += price * quantity;
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <img src="${img}">
+        <div class="cart-item-name" onclick="location.href='product.html?id=${idx}'">${name} ×${quantity}</div>
+        <div>$${(price*quantity).toFixed(2)}</div>
+        <button onclick="changeQuantity('${key}',1)">+</button>
+        <button onclick="changeQuantity('${key}',-1)">−</button>
+        <button class="remove" onclick="removeItem('${key}')">x</button>
+      `;
+      c.appendChild(div);
+    }
+    t.textContent = `Total: $${total.toFixed(2)}`;
+  }
+
+  function toggleCart() {
+    const w = document.getElementById('cartWindow');
+    w.style.display = w.style.display === 'block' ? 'none' : 'block';
+  }
+
+  loadProductData();
+</script>
+
+</body>
+</html>
