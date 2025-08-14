@@ -31,9 +31,9 @@
     },
     "gallery": {
       "Car": [
-        "product_images/product1.png",
-        "product_images/product1.png",
-        "product_images/product1.png"
+        "product_images/product6.png",
+        "product_images/product7.png",
+        "product_images/product5.png"
       ],
       "Lock": [
         "product_images/product2.png",
@@ -58,3 +58,4 @@
     ]
   }
   
+
