@@ -122,128 +122,132 @@ nav a:hover { color: var(--primary-color);}
 
 <!-- EmailJS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<!-- ...your existing HTML/CSS above remains unchanged... -->
-
 <script>
-    emailjs.init("cSr-vym581jsnY7ZW"); // your EmailJS public key
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        const viewerContainer = document.getElementById('viewer-container');
-        const placeholder = document.getElementById('viewer-placeholder');
-        const fileInput = document.getElementById('upload-file');
-        const colorInput = document.getElementById('color-picker');
-        const colorButtons = document.querySelectorAll('.color-button');
-        let scene, camera, renderer, controls, model;
-    
-        function initViewer() {
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xe0e0e0);
-            camera = new THREE.PerspectiveCamera(75, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 2000);
-            camera.position.set(200,200,200);
-            renderer = new THREE.WebGLRenderer({antialias:true});
-            renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
-            viewerContainer.appendChild(renderer.domElement);
-            const ambientLight = new THREE.AmbientLight(0xffffff,0.6);
-            scene.add(ambientLight);
-            const dirLight = new THREE.DirectionalLight(0xffffff,0.8);
-            dirLight.position.set(200,200,200); scene.add(dirLight);
-            scene.add(new THREE.AxesHelper(100));
-            scene.add(new THREE.GridHelper(200,20));
-            controls = new THREE.OrbitControls(camera,renderer.domElement);
-            controls.enableDamping = true;
-            function animate(){requestAnimationFrame(animate); controls.update(); renderer.render(scene,camera);}
-            animate();
-            window.addEventListener('resize',()=>{camera.aspect=viewerContainer.clientWidth/viewerContainer.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(viewerContainer.clientWidth,viewerContainer.clientHeight);});
-        }
-    
-        function fitModelToGrid(object){
-            const box = new THREE.Box3().setFromObject(object);
-            const size = box.getSize(new THREE.Vector3());
-            const maxDim = Math.max(size.x,size.y,size.z);
-            const scale = 80/maxDim; object.scale.set(scale,scale,scale);
-            const newBox = new THREE.Box3().setFromObject(object);
-            const center = newBox.getCenter(new THREE.Vector3());
-            const minY = newBox.min.y;
-            object.position.x -= center.x; object.position.z -= center.z; object.position.y -= minY;
-        }
-    
-        function loadModel(file){
-            if(model) scene.remove(model);
-            const reader = new FileReader();
-            const ext = file.name.split('.').pop().toLowerCase();
-            reader.onload = (event)=>{
-                let object;
-                if(ext==='stl'){
-                    const loader = new THREE.STLLoader();
-                    const geometry = loader.parse(event.target.result);
-                    object = new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:colorInput.value}));
-                } else if(ext==='obj'){
-                    const loader = new THREE.OBJLoader();
-                    object = loader.parse(event.target.result);
-                    object.traverse(child=>{if(child.isMesh) child.material=new THREE.MeshStandardMaterial({color:colorInput.value});});
-                } else{alert('Unsupported file'); return;}
-                fitModelToGrid(object);
-                scene.add(object);
-                model=object;
-                placeholder.style.display='none';
-            };
-            if(ext==='stl') reader.readAsArrayBuffer(file); else reader.readAsText(file);
-        }
-    
-        fileInput.addEventListener('change',(e)=>{
-            const file=e.target.files[0];
-            if(file){ if(!scene) initViewer(); loadModel(file);}
-        });
-    
-        colorButtons.forEach(btn=>{
-            btn.addEventListener('click',()=>{
-                colorButtons.forEach(b=>b.classList.remove('selected'));
-                btn.classList.add('selected');
-                const color=btn.dataset.color;
-                colorInput.value=color;
-                if(model) model.traverse(c=>{if(c.isMesh)c.material.color.set(color);});
-            });
-        });
-        colorButtons[0].classList.add('selected');
-    
-        // --- FORM SUBMISSION USING transfer.sh ---
-        const form = document.getElementById('upload-form');
-        form.addEventListener('submit', function(e){
-            e.preventDefault();
-            const file = fileInput.files[0];
-            if(!file){ alert('Select a file'); return;}
-    
-            // Upload to transfer.sh
-            fetch(`https://transfer.sh/${file.name}`, { method: "PUT", body: file })
-            .then(resp => resp.text())
-            .then(fileUrl => {
-                // Send via EmailJS
-                const templateParams = {
-                    file_name: file.name,
-                    file_url: fileUrl,
-                    color: colorInput.value,
-                    filament: document.getElementById('filament').value,
-                    infill: document.getElementById('infill').value,
-                    scale: document.getElementById('scale').value,
-                    walls: document.getElementById('walls').value,
-                    layer_height: document.getElementById('layer-height').value,
-                    notes: document.getElementById('notes').value
-                };
-                return emailjs.send('service_7hetpye','template_5m2vn88',templateParams);
-            })
-            .then(()=>{ 
-                alert('Email sent!'); 
-                form.reset(); 
-                placeholder.style.display='flex'; 
-                if(model) scene.remove(model); 
-            })
-            .catch(err=>{
-                console.error(err);
-                alert("Error: " + err.message);
-            });
+emailjs.init("cSr-vym581jsnY7ZW"); // your EmailJS public key
+
+document.addEventListener('DOMContentLoaded', () => {
+    const viewerContainer = document.getElementById('viewer-container');
+    const placeholder = document.getElementById('viewer-placeholder');
+    const fileInput = document.getElementById('upload-file');
+    const colorInput = document.getElementById('color-picker');
+    const colorButtons = document.querySelectorAll('.color-button');
+    let scene, camera, renderer, controls, model;
+
+    function initViewer() {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xe0e0e0);
+        camera = new THREE.PerspectiveCamera(75, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 2000);
+        camera.position.set(200,200,200);
+        renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
+        viewerContainer.appendChild(renderer.domElement);
+        const ambientLight = new THREE.AmbientLight(0xffffff,0.6);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff,0.8);
+        dirLight.position.set(200,200,200); scene.add(dirLight);
+        scene.add(new THREE.AxesHelper(100));
+        scene.add(new THREE.GridHelper(200,20));
+        controls = new THREE.OrbitControls(camera,renderer.domElement);
+        controls.enableDamping = true;
+        function animate(){requestAnimationFrame(animate); controls.update(); renderer.render(scene,camera);}
+        animate();
+        window.addEventListener('resize',()=>{camera.aspect=viewerContainer.clientWidth/viewerContainer.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(viewerContainer.clientWidth,viewerContainer.clientHeight);});
+    }
+
+    function fitModelToGrid(object){
+        const box = new THREE.Box3().setFromObject(object);
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x,size.y,size.z);
+        const scale = 80/maxDim; object.scale.set(scale,scale,scale);
+        const newBox = new THREE.Box3().setFromObject(object);
+        const center = newBox.getCenter(new THREE.Vector3());
+        const minY = newBox.min.y;
+        object.position.x -= center.x; object.position.z -= center.z; object.position.y -= minY;
+    }
+
+    function loadModel(file){
+        if(model) scene.remove(model);
+        const reader = new FileReader();
+        const ext = file.name.split('.').pop().toLowerCase();
+        reader.onload = (event)=>{
+            let object;
+            if(ext==='stl'){
+                const loader = new THREE.STLLoader();
+                const geometry = loader.parse(event.target.result);
+                object = new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:colorInput.value}));
+            } else if(ext==='obj'){
+                const loader = new THREE.OBJLoader();
+                object = loader.parse(event.target.result);
+                object.traverse(child=>{if(child.isMesh) child.material=new THREE.MeshStandardMaterial({color:colorInput.value});});
+            } else{alert('Unsupported file'); return;}
+            fitModelToGrid(object);
+            scene.add(object);
+            model=object;
+            placeholder.style.display='none';
+        };
+        if(ext==='stl') reader.readAsArrayBuffer(file); else reader.readAsText(file);
+    }
+
+    fileInput.addEventListener('change',(e)=>{
+        const file=e.target.files[0];
+        if(file){ if(!scene) initViewer(); loadModel(file);}
+    });
+
+    colorButtons.forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            colorButtons.forEach(b=>b.classList.remove('selected'));
+            btn.classList.add('selected');
+            const color=btn.dataset.color;
+            colorInput.value=color;
+            if(model) model.traverse(c=>{if(c.isMesh)c.material.color.set(color);});
         });
     });
-    </script>
-    
+    colorButtons[0].classList.add('selected');
+
+    // --- FORM SUBMISSION WITH FILE.IO ---
+    const form = document.getElementById('upload-form');
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const file = fileInput.files[0];
+        if(!file){ alert('Select a file'); return;}
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        // Upload file to file.io
+        fetch("https://file.io", { method: "POST", body: formData })
+        .then(response => response.json())
+        .then(data => {
+            if(!data.success) throw new Error(data.message || "Upload failed");
+
+            const fileUrl = data.link; // link to the uploaded file
+
+            const templateParams = {
+                file_name: file.name,
+                file_url: fileUrl, // send the link instead of Base64
+                color: colorInput.value,
+                filament: document.getElementById('filament').value,
+                infill: document.getElementById('infill').value,
+                scale: document.getElementById('scale').value,
+                walls: document.getElementById('walls').value,
+                layer_height: document.getElementById('layer-height').value,
+                notes: document.getElementById('notes').value
+            };
+
+            return emailjs.send('service_7hetpye','template_5m2vn88',templateParams);
+        })
+        .then(()=>{ 
+            alert('Email sent!'); 
+            form.reset(); 
+            placeholder.style.display='flex'; 
+            if(model) scene.remove(model); 
+        })
+        .catch(err=>{
+            console.error(err);
+            alert("Error: " + err.message);
+        });
+    });
+});
+</script>
 </body>
 </html>
