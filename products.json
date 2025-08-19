@@ -1,0 +1,103 @@
+[
+  {
+    "id": 1,
+    "name": "Darth vader ბიუსტი",
+    "price": 10,
+    "description": "Turn your favorite photo into a stunning 3D printed lithophane. When backlit, your image comes to life with incredible detail. Perfect for gifts and keepsakes.",
+    "keywords": ["darth", "vader", "bust", "ბიუსტი", "დართ", "ვეიდერი"],
+    "image": "product_images/product1.png",
+    "gallery": ["product_images/product1_gallery1.png", "product_images/product1_gallery2.png"],
+    "trending": true
+  },
+  {
+    "id": 2,
+    "name": "საფანქრე",
+    "price": 10,
+    "description": "A flexible, articulated dragon that can be posed in countless ways. A fantastic desk toy or decorative piece for fantasy lovers.",
+    "keywords": ["ფანქარი", "საფანქრე", "ძრავი", "ძრავა", "ჩასადები"],
+    "image": "product_images/product2.png",
+    "gallery": ["product_images/product2_gallery1.png", "product_images/product2_gallery2.png"],
+    "trending": true
+  },
+  {
+    "id": 3,
+    "name": "კვერცხის შესანახი",
+    "price": 20,
+    "description": "A beautiful and intricate vase designed with a Voronoi pattern. This modern piece is a guaranteed conversation starter and adds a touch of elegance to any room.",
+    "keywords": ["vase", "home", "decor", "voronoi", "modern"],
+    "image": "product_images/product3.png",
+    "gallery": ["product_images/product3_gallery1.png", "product_images/product3_gallery2.png"],
+    "trending": false
+  },
+  {
+    "id": 4,
+    "name": "ironman-ის გულის რეაქტორი MK2",
+    "price": 40,
+    "description": "Iron Man Arc Reactor MK2",
+    "keywords": ["iron", "man", "heart", "reactor", "arc", "რკინის", "კაცი", "რკინის კაცი", "ironman", "iron man", "გული", "რეაქტორი"],
+    "image": "product_images/product4.png",
+    "gallery": ["product_images/product4_gallery1.png", "product_images/product4_gallery2.png"],
+    "trending": false
+  },
+  {
+    "id": 5,
+    "name": "ღვინის დამჭერი ხელი",
+    "price": 15.00,
+    "description": "A clever and stylish self-watering planter. The two-part design provides a water reservoir to keep your plants happy and hydrated.",
+    "keywords": ["ხელი", "ღვინო", "დამჭერი", "home", "self-watering"],
+    "image": "product_images/product5.png",
+    "gallery": ["product_images/product5_gallery1.png", "product_images/product5_gallery2.png"],
+    "trending": false
+  },
+  {
+    "id": 6,
+    "name": "Headphone Stand",
+    "price": 18.75,
+    "description": "A sleek and sturdy stand to store your headphones. Keeps your desk organized and prevents damage to your gear. Available in multiple colors.",
+    "keywords": ["headphone", "stand", "desk", "organizer", "gaming"],
+    "image": "product_images/product6.png",
+    "gallery": ["product_images/product6_gallery1.png", "product_images/product6_gallery2.png"],
+    "trending": false
+  },
+  {
+    "id": 7,
+    "name": "Custom Name Keychain",
+    "price": 9.99,
+    "description": "Personalize your keys with a custom 3D printed name keychain. A simple, durable, and thoughtful gift for anyone.",
+    "keywords": ["keychain", "custom", "name", "gift", "personalized"],
+    "image": "product_images/product7.png",
+    "gallery": ["product_images/product7_gallery1.png", "product_images/product7_gallery2.png"],
+    "trending": false
+  },
+  {
+    "id": 8,
+    "name": "Cable Management Clips (10 pcs)",
+    "price": 12.50,
+    "description": "Tame the cable chaos behind your desk or TV with this set of 10 durable cable management clips. Easy to install and incredibly useful.",
+    "keywords": ["cable", "organizer", "clips", "desk", "tech"],
+    "image": "product_images/product8.png",
+    "gallery": ["product_images/product8_gallery1.png", "product_images/product8_gallery2.png"],
+    "trending": false
+  },
+  {
+    "id": 9,
+    "name": "Flexi-Rex Dinosaur",
+    "price": 14.00,
+    "description": "A classic 3D print, the Flexi-Rex is a fun, flexible Tyrannosaurus Rex toy that can stand on its own. Kids and adults love it!",
+    "keywords": ["dinosaur", "toy", "flexi", "rex", "kids"],
+    "image": "product_images/product9.png",
+    "gallery": ["product_images/product9_gallery1.png", "product_images/product9_gallery2.png"],
+    "trending": false
+  },
+  {
+    "id": 10,
+    "name": "Modular Desk Organizer",
+    "price": 22.00,
+    "description": "A customizable modular organizer for your desk. Arrange the different compartments to perfectly fit your pens, notes, and other supplies.",
+    "keywords": ["desk", "organizer", "modular", "office", "pen holder"],
+    "image": "product_images/product10.png",
+    "gallery": ["product_images/product10_gallery1.png", "product_images/product10_gallery2.png"],
+    "trending": false
+  }
+  
+]

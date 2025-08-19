@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Custom Model - Geo3D</title>
+<style>
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --background-color: #ecf0f1;
+    --surface-color: #ffffff;
+    --text-color: #34495e;
+    --border-radius: 8px;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; margin:0; background-color: var(--background-color); color: var(--text-color);}
+.container { width:90%; max-width:1200px; margin:0 auto; padding:20px 0;}
+h2 { text-align:center; color: var(--secondary-color); margin-bottom:30px;}
+header { background-color: var(--surface-color); padding:15px 5%; display:flex; justify-content:space-between; align-items:center; box-shadow: var(--shadow); position:sticky; top:0; z-index:1000;}
+.logo { font-size:1.5em; font-weight:bold; color: var(--primary-color); text-decoration:none;}
+nav a { text-decoration:none; color: var(--secondary-color); margin-left:20px; font-weight:500; transition: color 0.3s;}
+nav a:hover { color: var(--primary-color);}
+.cart-indicator { position:relative; cursor:pointer;}
+.cart-count { position:absolute; top:-10px; right:-15px; background-color: var(--primary-color); color:white; border-radius:50%; padding:2px 6px; font-size:0.8em; font-weight:bold;}
+.upload-layout { display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:40px;}
+@media(max-width:900px){.upload-layout{grid-template-columns:1fr;}}
+#viewer-container { background-color:#e0e0e0; border-radius: var(--border-radius); height:300px; display:flex; align-items:center; justify-content:center; color:#999; font-size:1.2em; position:relative; overflow:hidden; box-shadow: var(--shadow);}
+.form-container { background-color: var(--surface-color); padding:30px; border-radius: var(--border-radius); box-shadow: var(--shadow);}
+.form-group { margin-bottom:20px;}
+.form-group label { display:block; margin-bottom:8px; font-weight:600; color: var(--secondary-color);}
+.form-group input[type="text"], .form-group input[type="number"], .form-group input[type="file"], .form-group textarea, .form-group select { width:100%; padding:12px; border:1px solid #ddd; border-radius: var(--border-radius); box-sizing:border-box; font-size:1em;}
+.form-group input[type="file"] { padding:8px;}
+.form-group textarea { resize: vertical; min-height:80px;}
+.submit-btn { background-color: var(--primary-color); color:white; border:none; padding:15px 30px; font-size:1.1em; font-weight:bold; border-radius:30px; cursor:pointer; transition: background-color 0.3s, transform 0.2s; width:100%;}
+.submit-btn:hover { background-color:#2980b9; transform:scale(1.02);}
+.color-buttons { display:flex; gap:10px; flex-wrap:wrap;}
+.color-button { width:30px; height:30px; border-radius:50%; border:2px solid #ccc; cursor:pointer;}
+.color-button.selected { border:3px solid var(--primary-color);}
+</style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">Geo3D</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="upload.html">Upload</a>
+        <a href="cart.html" class="cart-indicator">
+            🛒 Cart
+            <span class="cart-count">0</span>
+        </a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>Get a Quote for Your Custom Model</h2>
+    <div class="upload-layout">
+        <div id="viewer-container">
+            <div id="viewer-placeholder">3D Preview will appear here</div>
+        </div>
+
+        <div class="form-container">
+            <form id="upload-form">
+                <div class="form-group">
+                    <label for="upload-file">3D Model File (.stl, .obj)</label>
+                    <input type="file" id="upload-file" name="attachment" accept=".stl,.obj" required>
+                </div>
+                <div class="form-group">
+                    <label>Material Color</label>
+                    <div class="color-buttons" id="color-buttons">
+                        <div class="color-button" data-color="#3498db" style="background:#3498db"></div>
+                        <div class="color-button" data-color="#e74c3c" style="background:#e74c3c"></div>
+                        <div class="color-button" data-color="#2ecc71" style="background:#2ecc71"></div>
+                        <div class="color-button" data-color="#f1c40f" style="background:#f1c40f"></div>
+                        <div class="color-button" data-color="#ffffff" style="background:#ffffff"></div>
+                        <div class="color-button" data-color="#000000" style="background:#000000"></div>
+                    </div>
+                    <input type="hidden" id="color-picker" name="color" value="#3498db">
+                </div>
+                <div class="form-group">
+                    <label for="filament">Filament Type</label>
+                    <select id="filament" name="filament" required>
+                        <option value="PLA">PLA</option>
+                        <option value="ABS">ABS</option>
+                        <option value="PETG">PETG</option>
+                        <option value="TPU">TPU</option>
+                        <option value="Nylon">Nylon</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="infill">Infill (%)</label>
+                    <input type="number" id="infill" name="infill" min="0" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="scale">Scale (%)</label>
+                    <input type="number" id="scale" name="scale" min="1" value="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="walls">Wall Count</label>
+                    <input type="number" id="walls" name="walls" min="1" value="3" required>
+                </div>
+                <div class="form-group">
+                    <label for="layer-height">Layer Height (mm)</label>
+                    <input type="text" id="layer-height" name="layer_height" value="0.2" required>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Additional Notes</label>
+                    <textarea id="notes" name="notes"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send for Review</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 3D Viewer libraries -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+emailjs.init("cSr-vym581jsnY7ZW"); // your EmailJS public key
+
+document.addEventListener('DOMContentLoaded', () => {
+    const viewerContainer = document.getElementById('viewer-container');
+    const placeholder = document.getElementById('viewer-placeholder');
+    const fileInput = document.getElementById('upload-file');
+    const colorInput = document.getElementById('color-picker');
+    const colorButtons = document.querySelectorAll('.color-button');
+    let scene, camera, renderer, controls, model;
+
+    function initViewer() {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xe0e0e0);
+        camera = new THREE.PerspectiveCamera(75, viewerContainer.clientWidth / viewerContainer.clientHeight, 0.1, 2000);
+        camera.position.set(200,200,200);
+        renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(viewerContainer.clientWidth, viewerContainer.clientHeight);
+        viewerContainer.appendChild(renderer.domElement);
+        const ambientLight = new THREE.AmbientLight(0xffffff,0.6);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff,0.8);
+        dirLight.position.set(200,200,200); scene.add(dirLight);
+        scene.add(new THREE.AxesHelper(100));
+        scene.add(new THREE.GridHelper(200,20));
+        controls = new THREE.OrbitControls(camera,renderer.domElement);
+        controls.enableDamping = true;
+        function animate(){requestAnimationFrame(animate); controls.update(); renderer.render(scene,camera);}
+        animate();
+        window.addEventListener('resize',()=>{camera.aspect=viewerContainer.clientWidth/viewerContainer.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(viewerContainer.clientWidth,viewerContainer.clientHeight);});
+    }
+
+    function fitModelToGrid(object){
+        const box = new THREE.Box3().setFromObject(object);
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x,size.y,size.z);
+        const scale = 80/maxDim; object.scale.set(scale,scale,scale);
+        const newBox = new THREE.Box3().setFromObject(object);
+        const center = newBox.getCenter(new THREE.Vector3());
+        const minY = newBox.min.y;
+        object.position.x -= center.x; object.position.z -= center.z; object.position.y -= minY;
+    }
+
+    function loadModel(file){
+        if(model) scene.remove(model);
+        const reader = new FileReader();
+        const ext = file.name.split('.').pop().toLowerCase();
+        reader.onload = (event)=>{
+            let object;
+            if(ext==='stl'){
+                const loader = new THREE.STLLoader();
+                const geometry = loader.parse(event.target.result);
+                object = new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:colorInput.value}));
+            } else if(ext==='obj'){
+                const loader = new THREE.OBJLoader();
+                object = loader.parse(event.target.result);
+                object.traverse(child=>{if(child.isMesh) child.material=new THREE.MeshStandardMaterial({color:colorInput.value});});
+            } else{alert('Unsupported file'); return;}
+            fitModelToGrid(object);
+            scene.add(object);
+            model=object;
+            placeholder.style.display='none';
+        };
+        if(ext==='stl') reader.readAsArrayBuffer(file); else reader.readAsText(file);
+    }
+
+    fileInput.addEventListener('change',(e)=>{
+        const file=e.target.files[0];
+        if(file){ if(!scene) initViewer(); loadModel(file);}
+    });
+
+    colorButtons.forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            colorButtons.forEach(b=>b.classList.remove('selected'));
+            btn.classList.add('selected');
+            const color=btn.dataset.color;
+            colorInput.value=color;
+            if(model) model.traverse(c=>{if(c.isMesh)c.material.color.set(color);});
+        });
+    });
+    colorButtons[0].classList.add('selected');
+
+    // --- FORM SUBMISSION WITH FILE.IO ---
+    const form = document.getElementById('upload-form');
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const file = fileInput.files[0];
+        if(!file){ alert('Select a file'); return;}
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        // Upload file to file.io
+        fetch("https://file.io", { method: "POST", body: formData })
+        .then(response => response.json())
+        .then(data => {
+            if(!data.success) throw new Error(data.message || "Upload failed");
+
+            const fileUrl = data.link; // link to the uploaded file
+
+            const templateParams = {
+                file_name: file.name,
+                file_url: fileUrl, // send the link instead of Base64
+                color: colorInput.value,
+                filament: document.getElementById('filament').value,
+                infill: document.getElementById('infill').value,
+                scale: document.getElementById('scale').value,
+                walls: document.getElementById('walls').value,
+                layer_height: document.getElementById('layer-height').value,
+                notes: document.getElementById('notes').value
+            };
+
+            return emailjs.send('service_7hetpye','template_5m2vn88',templateParams);
+        })
+        .then(()=>{ 
+            alert('Email sent!'); 
+            form.reset(); 
+            placeholder.style.display='flex'; 
+            if(model) scene.remove(model); 
+        })
+        .catch(err=>{
+            console.error(err);
+            alert("Error: " + err.message);
+        });
+    });
+});
+</script>
+</body>
+</html>
