@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Geo3D Custom Print</title>
+<style>
+.contact-container { background-color: var(--surface-color); padding: 20px; margin-top: 50px; text-align: center; border-radius: var(--border-radius); box-shadow: var(--shadow); }
+.contact-container p { margin: 5px 0; }
+.contact-container a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
+.contact-container a:hover { text-decoration: underline; }
+
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --background-color: #ecf0f1;
+    --surface-color: #ffffff;
+    --text-color: #34495e;
+    --border-radius: 8px;
+    --shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+* { box-sizing: border-box; }
+
+body { font-family: system-ui, sans-serif; margin: 0; background-color: var(--background-color); color: var(--text-color); }
+header { background-color: var(--surface-color); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 1000; }
+.logo { font-size: 1.5em; font-weight: bold; color: var(--primary-color); text-decoration: none; }
+nav a { text-decoration: none; color: var(--secondary-color); margin-left: 20px; font-weight: 500; transition: color 0.3s; }
+nav a:hover { color: var(--primary-color); }
+.cart-indicator { position: relative; cursor: pointer; }
+.cart-count { position: absolute; top: -10px; right: -15px; background-color: var(--primary-color); color: #fff; border-radius: 50%; padding: 2px 6px; font-size: 0.8em; font-weight: bold; }
+
+/* Slideshow */
+.slideshow-container { position:relative; max-width:100%; margin:0 auto; overflow:hidden; }
+.slide { display:none; }
+.slide img { width:100%; height:450px; object-fit:cover; border-radius:0; }
+.prev, .next { cursor:pointer; position:absolute; top:50%; transform:translateY(-50%); padding:16px; color:white; font-weight:bold; font-size:24px; border-radius:50%; background:rgba(0,0,0,0.4); user-select:none; }
+.prev { left:20px; }
+.next { right:20px; }
+.dot-container { text-align:center; margin-top:10px; }
+.dot { cursor:pointer; height:15px; width:15px; margin:0 5px; background-color:#bbb; border-radius:50%; display:inline-block; transition:background-color 0.6s ease; }
+.active, .dot:hover { background-color:var(--primary-color); }
+
+.container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 20px 0; }
+h1, h2 { text-align: center; color: var(--secondary-color); margin-bottom: 30px; }
+
+.form-wrapper { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 30px; }
+
+/* Preview panel */
+.image-preview-panel {
+    flex: 1; min-width: 280px;
+    background: var(--surface-color);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    max-height: 500px;
+    overflow-y: auto;
+    display: none;
+}
+.image-preview-panel.active { display: block; }
+.image-preview-panel h3 { margin-bottom: 15px; text-align: center; color: var(--secondary-color); }
+
+.preview-images { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+.preview-item { position: relative; width: 100%; height: 100px; overflow: hidden; border-radius: 8px; }
+.preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Remove button */
+.remove-btn {
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+    border: none; border-radius: 50%;
+    background: rgba(0,0,0,0.65); color: #fff;
+    font-size: 16px; line-height: 1;
+    cursor: pointer; padding: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+.remove-btn:hover { background: rgba(0,0,0,0.8); }
+
+/* Form side */
+.form-container {
+    flex: 2; min-width: 320px;
+    background-color: var(--surface-color);
+    padding: 20px; border-radius: var(--border-radius); box-shadow: var(--shadow);
+}
+label { display: block; margin: 15px 0 5px; font-weight: 600; }
+input, select, textarea {
+    width: 100%; padding: 12px 15px;
+    font-size: 1em; border-radius: var(--border-radius);
+    border: 1px solid #ddd;
+}
+.drop-zone {
+    border: 2px dashed var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 20px; text-align: center;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s;
+}
+.drop-zone.dragover { background: #ecf6fd; border-color: #2980b9; }
+.drop-zone input { display: none; }
+.drop-zone span { display: block; color: var(--secondary-color); font-size: 0.95em; margin-top: 8px; }
+
+button {
+    margin-top: 20px; padding: 15px 30px;
+    background-color: var(--primary-color); color: white;
+    border: none; font-size: 1.1em; border-radius: 30px;
+    cursor: pointer; transition: 0.3s;
+}
+button:hover { background-color: #2980b9; }
+
+.company-info {
+    text-align: center; background-color: var(--surface-color);
+    padding: 15px; border-radius: var(--border-radius);
+    margin: 40px auto 20px auto; box-shadow: var(--shadow);
+    font-size: 0.95em;
+}
+.company-info p { margin: 5px 0; color: var(--secondary-color); }
+</style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="logo.png" alt="Geo3D Logo" style="height:40px; vertical-align:middle;">
+            Geo3D
+        </a>
+        <nav>
+            <a href="about-us.html">ვინ ვართ ჩვენ?</a>
+            <a href="cart.html" class="cart-indicator">🛒 Cart<span class="cart-count">0</span></a>
+        </nav>
+    </header>
+
+<!-- Slideshow -->
+<div class="slideshow-container">
+    <div class="slide fade"><img src="product1.png" alt="Custom Print Example 1"></div>
+    <div class="slide fade"><img src="product2.png" alt="Custom Print Example 2"></div>
+    <div class="slide fade"><img src="product3.png" alt="Custom Print Example 3"></div>
+    <a class="prev">&#10094;</a>
+    <a class="next">&#10095;</a>
+</div>
+<div class="dot-container">
+    <span class="dot"></span> 
+    <span class="dot"></span> 
+    <span class="dot"></span> 
+</div>
+
+<div class="container">
+    <h2>Custom Print Request</h2>
+    <div class="form-wrapper">
+        <!-- Left preview -->
+        <div class="image-preview-panel" id="previewPanel">
+            <h3>Uploaded Images</h3>
+            <div class="preview-images" id="preview"></div>
+        </div>
+
+        <!-- Right form -->
+        <div class="form-container">
+            <form id="customPrintForm">
+                <label for="customerName">Your Name</label>
+                <input type="text" id="customerName" required>
+
+                <label for="customerEmail">Email</label>
+                <input type="email" id="customerEmail" required>
+
+                <label for="customerPhone">Phone</label>
+                <input type="text" id="customerPhone" required>
+
+                <label for="size">Select Size</label>
+                <select id="size" required>
+                    <option value="">--Choose Size--</option>
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                </select>
+
+                <label for="color">Select Color</label>
+                <select id="color" required>
+                    <option value="">--Choose Color--</option>
+                    <option value="White">White</option>
+                    <option value="Black">Black</option>
+                    <option value="Red">Red</option>
+                    <option value="Blue">Blue</option>
+                    <option value="Green">Green</option>
+                </select>
+
+                <label for="files">Upload Images</label>
+                <div class="drop-zone" id="dropZone" aria-label="Upload images">
+                    <p>Drag & Drop images here</p>
+                    <span>or click to select</span>
+                    <input type="file" id="files" accept="image/*" multiple required>
+                </div>
+
+                <label for="notes">Additional Notes</label>
+                <textarea id="notes" rows="4" placeholder="Any extra instructions..."></textarea>
+
+                <button type="submit">Send Request</button>
+            </form>
+            <p id="status" style="margin-top:20px;text-align:center;"></p>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+// --- EmailJS init (replace with your public key) ---
+emailjs.init('cSr-vym581jsnY7ZW');
+
+// Slideshow logic
+let slideIndex = 0;
+showSlides(slideIndex);
+
+function plusSlides(n){ showSlides(slideIndex += n); }
+function currentSlide(n){ showSlides(slideIndex = n); }
+
+function showSlides(n){
+    let slides=document.getElementsByClassName("slide");
+    let dots=document.getElementsByClassName("dot");
+    if(n >= slides.length){ slideIndex = 0; }
+    if(n < 0){ slideIndex = slides.length-1; }
+    for(let i=0;i<slides.length;i++){ slides[i].style.display="none"; }
+    for(let i=0;i<dots.length;i++){ dots[i].className=dots[i].className.replace(" active",""); }
+    slides[slideIndex].style.display="block";
+    dots[slideIndex].className += " active";
+}
+document.querySelector(".prev").onclick=()=>plusSlides(-1);
+document.querySelector(".next").onclick=()=>plusSlides(1);
+document.querySelectorAll(".dot").forEach((dot,i)=>dot.onclick=()=>currentSlide(i));
+setInterval(()=>{ plusSlides(1); },5000);
+
+// ---- Existing custom print logic ----
+
+// DOM refs
+const dropZone     = document.getElementById('dropZone');
+const fileInput    = document.getElementById('files');
+const preview      = document.getElementById('preview');
+const previewPanel = document.getElementById('previewPanel');
+let fileList = [];
+
+dropZone.addEventListener('click', () => fileInput.click());
+['dragenter','dragover'].forEach(evt =>
+  dropZone.addEventListener(evt, e => {
+    e.preventDefault(); e.stopPropagation();
+    dropZone.classList.add('dragover');
+  })
+);
+['dragleave','dragend','drop'].forEach(evt =>
+  dropZone.addEventListener(evt, e => {
+    e.preventDefault(); e.stopPropagation();
+    dropZone.classList.remove('dragover');
+  })
+);
+dropZone.addEventListener('drop', e => {
+    const dt = e.dataTransfer;
+    if (!dt) return;
+    handleFiles(dt.files);
+});
+fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
+function handleFiles(files){
+    for(const file of files){
+        if(!fileList.some(f => f.name === file.name && f.size === file.size)){
+            fileList.push(file);
+        }
+    }
+    renderPreview();
+}
+function renderPreview(){
+    preview.innerHTML = '';
+    if(fileList.length > 0){
+        previewPanel.classList.add('active');
+        fileList.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const item = document.createElement('div');
+                item.className = 'preview-item';
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'remove-btn';
+                btn.textContent = '×';
+                btn.addEventListener('click', () => {
+                    fileList.splice(index, 1);
+                    renderPreview();
+                });
+                item.appendChild(img);
+                item.appendChild(btn);
+                preview.appendChild(item);
+            };
+            reader.readAsDataURL(file);
+        });
+    } else {
+        previewPanel.classList.remove('active');
+    }
+}
+
+document.getElementById('customPrintForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const status = document.getElementById('status');
+    status.textContent = 'Uploading images and sending request...';
+
+    if(fileList.length === 0){
+        status.textContent = 'Please select images.';
+        return;
+    }
+    try{
+        const uploadedUrls = [];
+        for(const file of fileList){
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'geo3d_biust');
+            const res = await axios.post('https://api.cloudinary.com/v1_1/dvyyjjh2q/image/upload', formData);
+            uploadedUrls.push(res.data.secure_url);
+        }
+        const emailContent =
+`Name: ${document.getElementById('customerName').value}
+Email: ${document.getElementById('customerEmail').value}
+Phone: ${document.getElementById('customerPhone').value}
+Size: ${document.getElementById('size').value}
+Color: ${document.getElementById('color').value}
+Notes: ${document.getElementById('notes').value}
+Images:
+${uploadedUrls.join('\n')}`;
+        await emailjs.send('service_7hetpye', 'template_xh12imn', { message: emailContent });
+        status.textContent = 'Request sent successfully!';
+        document.getElementById('customPrintForm').reset();
+        fileList = [];
+        renderPreview();
+    }catch(err){
+        console.error(err);
+        status.textContent = 'Error sending request. Please try again.';
+    }
+});
+</script>
+</body>
+<div class="contact-container">
+    <p>Email: <a href="mailto:geo3d.ge.store@gmail.com">geo3d.ge.store@gmail.com</a></p>
+    <p>Phone: <a href="tel:+1234567890">+1 234 567 890</a></p>
+    <p>&copy; 2025 Geo3D. All rights reserved.</p>
+</div>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dual Name Print - Geo3D</title>
+<style>
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --background-color: #ecf0f1;
+    --surface-color: #ffffff;
+    --text-color: #34495e;
+    --border-radius: 8px;
+    --shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+body { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; margin:0; background-color:var(--background-color); color:var(--text-color); }
+.container { width:90%; max-width:800px; margin:0 auto; padding:40px 0; }
+h2 { text-align:center; color:var(--secondary-color); margin-bottom:30px; }
+
+/* Header */
+header { background-color:var(--surface-color); padding:15px 5%; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow); position:sticky; top:0; z-index:1000; }
+.logo { font-size:1.5em; font-weight:bold; color:var(--primary-color); text-decoration:none; }
+nav a { text-decoration:none; color:var(--secondary-color); margin-left:20px; font-weight:500; transition:color 0.3s; }
+nav a:hover { color:var(--primary-color); }
+.cart-indicator { position:relative; cursor:pointer; }
+.cart-count { position:absolute; top:-10px; right:-15px; background-color:var(--primary-color); color:white; border-radius:50%; padding:2px 6px; font-size:0.8em; font-weight:bold; }
+
+/* Slideshow */
+.slideshow-container { position:relative; max-width:100%; margin:0 auto; overflow:hidden; }
+.slide { display:none; }
+.slide img { width:100%; height:450px; object-fit:cover; border-radius:0; }
+.prev, .next { cursor:pointer; position:absolute; top:50%; transform:translateY(-50%); padding:16px; color:white; font-weight:bold; font-size:24px; border-radius:50%; background:rgba(0,0,0,0.4); user-select:none; }
+.prev { left:20px; }
+.next { right:20px; }
+.dot-container { text-align:center; margin-top:10px; }
+.dot { cursor:pointer; height:15px; width:15px; margin:0 5px; background-color:#bbb; border-radius:50%; display:inline-block; transition:background-color 0.6s ease; }
+.active, .dot:hover { background-color:var(--primary-color); }
+
+/* Form Box */
+.form-box { background-color:var(--surface-color); padding:30px; border-radius:var(--border-radius); box-shadow:var(--shadow); margin-top:40px; }
+.form-box label { font-weight:600; display:block; margin:15px 0 5px; }
+.form-box input, .form-box textarea { width:100%; padding:12px; border:1px solid #ccc; border-radius:6px; font-size:1em; }
+.form-box button { margin-top:20px; width:100%; background-color:var(--primary-color); color:white; border:none; padding:15px; font-size:1.1em; font-weight:bold; border-radius:30px; cursor:pointer; transition:background-color 0.3s, transform 0.2s; }
+.form-box button:hover { background-color:#2980b9; transform:scale(1.02); }
+
+/* Confirmation */
+.success-message { text-align:center; color:green; font-weight:bold; margin-top:20px; }
+.error-message { text-align:center; color:red; font-weight:bold; margin-top:20px; }
+
+.contact-container { background-color: var(--surface-color); padding: 20px; margin-top: 50px; text-align: center; border-radius: var(--border-radius); box-shadow: var(--shadow); }
+.contact-container p { margin: 5px 0; }
+.contact-container a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
+.contact-container a:hover { text-decoration: underline; }
+
+</style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="logo.png" alt="Geo3D Logo" style="height:40px; vertical-align:middle;">
+            Geo3D
+        </a>
+        <nav>
+            <a href="about-us.html">ვინ ვართ ჩვენ?</a>
+            <a href="cart.html" class="cart-indicator">🛒 Cart<span class="cart-count">0</span></a>
+        </nav>
+    </header>
+<!-- Slideshow -->
+<div class="slideshow-container">
+    <div class="slide fade"><img src="dual-name_1.webp" alt="Dual Name Example 1"></div>
+    <div class="slide fade"><img src="dual-name_2.png" alt="Dual Name Example 2"></div>
+    <div class="slide fade"><img src="dual-name_3.png" alt="Dual Name Example 3"></div>
+    <a class="prev">&#10094;</a>
+    <a class="next">&#10095;</a>
+</div>
+<div class="dot-container">
+    <span class="dot"></span> 
+    <span class="dot"></span> 
+    <span class="dot"></span> 
+</div>
+
+<div class="container">
+    <h2>Create Your Dual Name Print</h2>
+    <div class="form-box">
+        <form id="dualname-form">
+            <label for="name1">First Name</label>
+            <input type="text" id="name1" name="name1" placeholder="Enter first name" required>
+
+            <label for="name2">Second Name</label>
+            <input type="text" id="name2" name="name2" placeholder="Enter second name" required>
+
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="notes">Additional Notes (optional)</label>
+            <textarea id="notes" name="notes" rows="4" placeholder="Color, size, style, etc."></textarea>
+
+            <button type="submit">Send Request</button>
+        </form>
+        <p id="form-message"></p>
+    </div>
+</div>
+
+
+
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+(function(){
+    emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS Public Key
+})();
+document.getElementById('dualname-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
+        name1: document.getElementById("name1").value,
+        name2: document.getElementById("name2").value,
+        email: document.getElementById("email").value,
+        notes: document.getElementById("notes").value
+    })
+    .then(function(){
+        document.getElementById("form-message").innerHTML = "<span class='success-message'>✅ Request sent successfully!</span>";
+        document.getElementById("dualname-form").reset();
+    }, function(error){
+        document.getElementById("form-message").innerHTML = "<span class='error-message'>❌ Failed to send. Please try again.</span>";
+        console.error(error);
+    });
+});
+</script>
+
+<!-- Slideshow Script -->
+<script>
+let slideIndex = 0;
+showSlides(slideIndex);
+
+function plusSlides(n){ showSlides(slideIndex += n); }
+function currentSlide(n){ showSlides(slideIndex = n); }
+
+function showSlides(n){
+    let slides=document.getElementsByClassName("slide");
+    let dots=document.getElementsByClassName("dot");
+    if(n >= slides.length){ slideIndex = 0; }
+    if(n < 0){ slideIndex = slides.length-1; }
+    for(let i=0;i<slides.length;i++){ slides[i].style.display="none"; }
+    for(let i=0;i<dots.length;i++){ dots[i].className=dots[i].className.replace(" active",""); }
+    slides[slideIndex].style.display="block";
+    dots[slideIndex].className += " active";
+}
+document.querySelector(".prev").onclick=()=>plusSlides(-1);
+document.querySelector(".next").onclick=()=>plusSlides(1);
+document.querySelectorAll(".dot").forEach((dot,i)=>dot.onclick=()=>currentSlide(i));
+
+// Auto-play
+setInterval(()=>{ plusSlides(1); },5000);
+</script>
+</body>
+<div class="contact-container">
+    <p>Email: <a href="mailto:geo3d.ge.store@gmail.com">geo3d.ge.store@gmail.com</a></p>
+    <p>Phone: <a href="tel:+1234567890">+1 234 567 890</a></p>
+    <p>&copy; 2025 Geo3D. All rights reserved.</p>
+</div>
+</html>

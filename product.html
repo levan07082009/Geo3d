@@ -1,390 +1,277 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details</title>
-    <style>
-        /* General Styles - Copied from index.html for consistency */
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --background-color: #ecf0f1;
-            --surface-color: #ffffff;
-            --text-color: #34495e;
-            --border-radius: 8px;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px 0;
-        }
-        h2 {
-            text-align: center;
-            color: var(--secondary-color);
-            margin-bottom: 30px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geo3D</title>
+<style>
+.contact-container { background-color: var(--surface-color); padding: 20px; margin-top: 50px; text-align: center; border-radius: var(--border-radius); box-shadow: var(--shadow); }
+.contact-container p { margin: 5px 0; }
+.contact-container a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
+.contact-container a:hover { text-decoration: underline; }
 
-        /* Header & Navigation */
-        header {
-            background-color: var(--surface-color);
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .logo {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-        nav a {
-            text-decoration: none;
-            color: var(--secondary-color);
-            margin-left: 20px;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        nav a:hover {
-            color: var(--primary-color);
-        }
-        .cart-indicator {
-            position: relative;
-            cursor: pointer;
-        }
-        .cart-count {
-            position: absolute;
-            top: -10px;
-            right: -15px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 0.8em;
-            font-weight: bold;
-        }
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --background-color: #ecf0f1;
+    --surface-color: #ffffff;
+    --text-color: #34495e;
+    --border-radius: 8px;
+    --shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+body { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; margin:0; background-color:var(--background-color); color:var(--text-color); }
+.container { width:90%; max-width:1200px; margin:0 auto; padding:20px 0; }
+h2 { text-align:center; color:var(--secondary-color); margin-bottom:30px; }
+/* Header */
+header { background-color:var(--surface-color); padding:15px 5%; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow); position:sticky; top:0; z-index:1000; }
+.logo { font-size:1.5em; font-weight:bold; color:var(--primary-color); text-decoration:none; }
+nav a { text-decoration:none; color:var(--secondary-color); margin-left:20px; font-weight:500; transition:color 0.3s; }
+nav a:hover { color:var(--primary-color); }
+.cart-indicator { position:relative; cursor:pointer; }
+.cart-count { position:absolute; top:-10px; right:-15px; background-color:var(--primary-color); color:white; border-radius:50%; padding:2px 6px; font-size:0.8em; font-weight:bold; }
 
-        /* Product Detail Section */
-        .product-detail-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            background-color: var(--surface-color);
-            padding: 40px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            margin-top: 40px;
-        }
-        .product-gallery {
-            flex: 1;
-            min-width: 300px;
-        }
-        .main-image-container {
-            position: relative;
-        }
-        #main-product-image {
-            width: 100%;
-            height: auto;
-            max-height: 450px;
-            object-fit: cover;
-            border-radius: var(--border-radius);
-            margin-bottom: 10px;
-        }
-        .gallery-nav {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
-        }
-        .gallery-nav button {
-            background-color: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 5px 12px;
-            border-radius: 50%;
-        }
-        .thumbnails {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .thumb {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: border-color 0.3s;
-        }
-        .thumb.active {
-            border-color: var(--primary-color);
-        }
-        .product-details {
-            flex: 1;
-            min-width: 300px;
-        }
-        #product-name {
-            font-size: 2.5em;
-            margin: 0 0 15px;
-            color: var(--secondary-color);
-        }
-        #product-price {
-            font-size: 2em;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-        #product-description {
-            line-height: 1.7;
-            margin-bottom: 30px;
-        }
-        .add-to-cart-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.1em;
-            font-weight: bold;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        .add-to-cart-btn:hover {
-            background-color: #2980b9;
-            transform: scale(1.02);
-        }
-        
-        /* Fallback Sections (Search, Trending, Grid) */
-        .search-container { text-align: center; margin: 40px 0; }
-        #search-bar { width: 50%; max-width: 500px; padding: 12px 20px; font-size: 1em; border-radius: 25px; border: 1px solid #ddd; }
-        .trending-section { margin-top: 60px; }
-        .trending-slider { display: flex; overflow-x: auto; padding-bottom: 20px; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; margin-top: 60px; }
-        .product-card { background-color: var(--surface-color); border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow); transition: transform 0.3s; }
-        .product-card:hover { transform: translateY(-5px); }
-        .product-card a { text-decoration: none; color: inherit; }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; }
-        .product-info { padding: 15px; }
-        .product-name { font-size: 1.1em; font-weight: 600; margin: 0 0 10px 0; }
-        .product-price { font-size: 1.2em; font-weight: bold; color: var(--primary-color); }
-        .trending-slider .product-card { flex: 0 0 280px; margin-right: 20px; }
-    </style>
+/* Product Detail */
+.product-detail-container { display:flex; flex-wrap:wrap; gap:40px; background-color:var(--surface-color); padding:40px; border-radius:var(--border-radius); box-shadow:var(--shadow); margin-top:40px; }
+.product-gallery { flex:1; min-width:300px; }
+.main-image-container { position:relative; cursor:zoom-in; }
+#main-product-image { width:100%; height:auto; max-height:450px; object-fit:cover; border-radius:var(--border-radius); margin-bottom:10px; transition:transform 0.3s ease; }
+#main-product-image.zoomed { transform:scale(2); cursor:zoom-out; }
+.gallery-nav { position:absolute; top:50%; width:100%; display:flex; justify-content:space-between; transform:translateY(-50%); }
+.gallery-nav button { background-color:rgba(0,0,0,0.5); color:white; border:none; font-size:1.5em; cursor:pointer; padding:5px 12px; border-radius:50%; }
+.thumbnails { display:flex; gap:10px; flex-wrap:wrap; }
+.thumb { width:80px; height:80px; object-fit:cover; border-radius:var(--border-radius); cursor:pointer; border:2px solid transparent; transition:border-color 0.3s; }
+.thumb.active { border-color:var(--primary-color); }
+.product-details { flex:1; min-width:300px; }
+#product-name { font-size:2.5em; margin:0 0 15px; color:var(--secondary-color); }
+#product-id { font-size:1em; color:#777; margin-bottom:15px; }
+#product-price { font-size:2em; font-weight:bold; color:var(--primary-color); margin-bottom:20px; }
+#product-description { line-height:1.7; margin-bottom:20px; }
+.option-label { font-weight:bold; margin-right:10px; }
+.select-option { margin-bottom:15px; padding:10px; font-size:1em; border-radius:6px; border:1px solid #ccc; width:100%; max-width:200px; }
+
+/* Buttons */
+.add-to-cart-btn { background-color:var(--primary-color); color:white; border:none; padding:15px 30px; font-size:1.1em; font-weight:bold; border-radius:30px; cursor:pointer; transition:background-color 0.3s, transform 0.2s; }
+.add-to-cart-btn:hover { background-color:#2980b9; transform:scale(1.02); }
+
+/* Fallback Sections */
+.search-container { text-align:center; margin:40px 0; }
+#search-bar { width:50%; max-width:500px; padding:12px 20px; font-size:1em; border-radius:25px; border:1px solid #ddd; }
+.trending-section { margin-top:60px; }
+.trending-slider { display:flex; overflow-x:auto; padding-bottom:20px; }
+.product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:30px; margin-top:60px; }
+.product-card { background-color:var(--surface-color); border-radius:var(--border-radius); overflow:hidden; box-shadow:var(--shadow); transition:transform 0.3s; }
+.product-card:hover { transform:translateY(-5px); }
+.product-card a { text-decoration:none; color:inherit; }
+.product-card img { width:100%; height:200px; object-fit:cover; }
+.product-info { padding:15px; }
+.product-name { font-size:1.1em; font-weight:600; margin:0 0 10px 0; }
+.product-price { font-size:1.2em; font-weight:bold; color:var(--primary-color); }
+.trending-slider .product-card { flex:0 0 280px; margin-right:20px; }
+
+/* Company Info Box */
+.company-info { text-align:center; background-color:var(--surface-color); padding:15px; border-radius:var(--border-radius); margin:40px auto 20px auto; box-shadow:var(--shadow); font-size:0.95em; }
+.company-info p { margin:5px 0; color:var(--secondary-color); }
+</style>
 </head>
 <body>
-
     <header>
-        <a href="index.html" class="logo">3D Print Forge</a>
+        <a href="index.html" class="logo">
+            <img src="product_images/logo.png" alt="Geo3D Logo" style="height:40px; vertical-align:middle;">
+            Geo3D
+        </a>
         <nav>
-            <a href="index.html">Home</a>
-            <a href="cart.html" class="cart-indicator">
-                🛒 Cart
-                <span class="cart-count">0</span>
-            </a>
+            <a href="about-us.html">ვინ ვართ ჩვენ?</a>
+            <a href="cart.html" class="cart-indicator">🛒 Cart<span class="cart-count">0</span></a>
         </nav>
     </header>
 
-    <div class="container" id="product-detail-container">
-        </div>
+<div class="container" id="product-detail-container"></div>
 
-    <div class="container">
-        <div class="search-container">
-            <input type="text" id="search-bar" placeholder="Search for other products...">
-        </div>
-
-        <div class="trending-section">
-            <h2>Trending Now</h2>
-            <div class="trending-slider" id="trending-slider"></div>
-        </div>
-        
-        <h2>Browse All Products</h2>
-        <div class="product-grid" id="product-grid"></div>
+<div class="container">
+    <div class="search-container">
+        <input type="text" id="search-bar" placeholder="Search for other products...">
     </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            let allProducts = [];
-            let currentProduct = null;
-            let currentImageIndex = 0;
+    <div class="trending-section">
+        <h2>Trending Now</h2>
+        <div class="trending-slider" id="trending-slider"></div>
+    </div>
+    <h2>Browse All Products</h2>
+    <div class="product-grid" id="product-grid"></div>
+</div>
 
-            // --- SHARED CART LOGIC ---
-            function getCart() {
-                return JSON.parse(localStorage.getItem('shoppingCart')) || {};
-            }
-            function saveCart(cart) {
-                localStorage.setItem('shoppingCart', JSON.stringify(cart));
-                updateCartIndicator();
-            }
-            function addToCart(productId) {
-                const cart = getCart();
-                cart[productId] = (cart[productId] || 0) + 1;
-                saveCart(cart);
-            }
-            function updateCartIndicator() {
-                const cart = getCart();
-                const totalItems = Object.values(cart).reduce((sum, quantity) => sum + quantity, 0);
-                document.querySelector('.cart-count').textContent = totalItems;
-            }
+<div class="contact-container">
+    <p>Email: <a href="mailto:geo3d.ge.store@gmail.com">geo3d.ge.store@gmail.com</a></p>
+    <p>Phone: <a href="tel:+1234567890">+1 234 567 890</a></p>
+    <p>&copy; 2025 Geo3D. All rights reserved.</p>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+    let allProducts=[], currentProduct=null, currentImageIndex=0, currentColor=null;
 
-            // Get product ID from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = parseInt(urlParams.get('id'));
+    function getCart(){ return JSON.parse(localStorage.getItem('shoppingCart'))||{}; }
+    function saveCart(cart){ localStorage.setItem('shoppingCart',JSON.stringify(cart)); updateCartIndicator(); }
+    function addToCart(productId, variantName, colorName){
+        const cart=getCart();
+        const key=`${productId}_${variantName}_${colorName??''}`;
+        cart[key]=(cart[key]||0)+1;
+        saveCart(cart);
+    }
+    function updateCartIndicator(){ const cart=getCart(); const total=Object.values(cart).reduce((sum,q)=>sum+q,0); document.querySelector('.cart-count').textContent=total; }
 
-            // Fetch all product data
-            fetch('products.json')
-                .then(response => response.json())
-                .then(data => {
-                    allProducts = data;
-                    currentProduct = allProducts.find(p => p.id === productId);
-                    
-                    if (currentProduct) {
-                        displayProductDetails(currentProduct);
-                    } else {
-                        document.getElementById('product-detail-container').innerHTML = '<h2>Product not found</h2>';
-                    }
-                    
-                    // Render fallback sections
-                    renderProductGrid(allProducts.filter(p => p.id !== productId)); // Exclude current product
-                    renderTrendingSlider(allProducts.filter(p => p.trending));
-                })
-                .catch(error => console.error('Error loading products:', error));
+    const productId=parseInt(new URLSearchParams(window.location.search).get('id'));
 
-            function displayProductDetails(product) {
-                document.title = product.name + " - 3D Print Forge";
-                const container = document.getElementById('product-detail-container');
-                const galleryImages = [product.image, ...product.gallery];
+    fetch('products.json')
+    .then(res=>res.json())
+    .then(data=>{
+        allProducts=data;
+        currentProduct=allProducts.find(p=>p.id===productId);
+        if(currentProduct) displayProductDetails(currentProduct);
+        else document.getElementById('product-detail-container').innerHTML='<h2>Product not found</h2>';
+        renderProductGrid(allProducts.filter(p=>p.id!==productId));
+        renderTrendingSlider(allProducts.filter(p=>p.trending));
+    })
+    .catch(err=>console.error(err));
 
-                container.innerHTML = `
-                    <div class="product-gallery">
-                        <div class="main-image-container">
-                            <img id="main-product-image" src="${galleryImages[0]}" alt="${product.name}">
-                            <div class="gallery-nav">
-                                <button id="prev-btn">&lt;</button>
-                                <button id="next-btn">&gt;</button>
-                            </div>
-                        </div>
-                        <div class="thumbnails" id="thumbnails">
-                            </div>
-                    </div>
-                    <div class="product-details">
-                        <h1 id="product-name">${product.name}</h1>
-                        <p id="product-price">$${product.price.toFixed(2)}</p>
-                        <p id="product-description">${product.description}</p>
-                        <button class="add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
-                    </div>
-                `;
+    function displayProductDetails(product){
+        document.title=product.name+" - Geo3D";
+        const container=document.getElementById('product-detail-container');
+        const galleryImages=[product.image,...(product.gallery||[])];
+        const paddedId=String(product.id).padStart(5,'0');
 
-                const thumbnailsContainer = document.getElementById('thumbnails');
-                galleryImages.forEach((imgSrc, index) => {
-                    const thumb = document.createElement('img');
-                    thumb.src = imgSrc;
-                    thumb.className = 'thumb';
-                    if (index === 0) thumb.classList.add('active');
-                    thumb.addEventListener('click', () => updateMainImage(index));
-                    thumbnailsContainer.appendChild(thumb);
-                });
+        currentColor = product.colors?.[0] ?? null;
 
-                document.querySelector('.add-to-cart-btn').addEventListener('click', (e) => {
-                    const id = e.target.dataset.productId;
-                    addToCart(id);
-                });
-                
-                document.getElementById('prev-btn').addEventListener('click', () => changeImage(-1));
-                document.getElementById('next-btn').addEventListener('click', () => changeImage(1));
-            }
-            
-            function updateMainImage(index) {
-                const galleryImages = [currentProduct.image, ...currentProduct.gallery];
-                currentImageIndex = index;
-                document.getElementById('main-product-image').src = galleryImages[currentImageIndex];
-                
-                document.querySelectorAll('.thumb').forEach((thumb, i) => {
-                    thumb.classList.toggle('active', i === currentImageIndex);
-                });
-            }
+        const variantOptions=(product.variants||[]).map(v=>{
+            const price = product.price + (v.priceadded??0);
+            return `<option value="${v.name}" data-price="${price}">${v.name} - ${price.toFixed(2)} ₾</option>`;
+        }).join('');
 
-            function changeImage(direction) {
-                const galleryImages = [currentProduct.image, ...currentProduct.gallery];
-                let newIndex = currentImageIndex + direction;
-                if (newIndex < 0) {
-                    newIndex = galleryImages.length - 1;
-                } else if (newIndex >= galleryImages.length) {
-                    newIndex = 0;
-                }
-                updateMainImage(newIndex);
-            }
-            
-            // Re-render fallback sections (similar to index.html)
-            function renderProductGrid(products) {
-                const productGrid = document.getElementById('product-grid');
-                productGrid.innerHTML = '';
-                products.forEach(product => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    card.innerHTML = `
-                        <a href="product.html?id=${product.id}">
-                            <img src="${product.image || 'product' + product.id + '.png'}" alt="${product.name}">
-                            <div class="product-info">
-                                <h3 class="product-name">${product.name}</h3>
-                                <p class="product-price">$${product.price.toFixed(2)}</p>
-                            </div>
-                        </a>
-                    `;
-                    productGrid.appendChild(card);
-                });
-            }
+        const colorOptions = (product.colors||[]).map(c=>`<option value="${c.name}" data-image="${c.image??galleryImages[0]}">${c.name}</option>`).join('');
 
-            function renderTrendingSlider(trendingProducts) {
-                const slider = document.getElementById('trending-slider');
-                slider.innerHTML = '';
-                trendingProducts.forEach(product => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    card.innerHTML = `
-                        <a href="product.html?id=${product.id}">
-                            <img src="${product.image || 'product' + product.id + '.png'}" alt="${product.name}">
-                            <div class="product-info">
-                                <h3 class="product-name">${product.name}</h3>
-                                <p class="product-price">$${product.price.toFixed(2)}</p>
-                            </div>
-                        </a>
-                    `;
-                    slider.appendChild(card);
-                });
-            }
-            
-            // Search functionality
-            document.getElementById('search-bar').addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const filteredProducts = allProducts.filter(product => 
-                    product.id !== productId && (
-                    product.name.toLowerCase().includes(searchTerm) ||
-                    product.description.toLowerCase().includes(searchTerm) ||
-                    product.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm))
-                ));
-                renderProductGrid(filteredProducts);
-            });
+        container.innerHTML=`
+        <div class="product-gallery">
+            <div class="main-image-container">
+                <img id="main-product-image" src="${galleryImages[0]}" alt="${product.name}">
+                <div class="gallery-nav">
+                    <button id="prev-btn">&lt;</button>
+                    <button id="next-btn">&gt;</button>
+                </div>
+            </div>
+            <div class="thumbnails" id="thumbnails"></div>
+        </div>
+        <div class="product-details">
+            <h1 id="product-name">${product.name}</h1>
+            <p id="product-id">Product ID: ${paddedId}</p>
+            <p id="product-price">${(product.price + (product.variants[0].priceadded??0)).toFixed(2)} ₾</p>
+            <p id="product-description">${product.description}</p>
+            <label class="option-label">Select Variant:</label>
+            <select id="variant-select" class="select-option">${variantOptions}</select>
+            ${colorOptions ? `<label class="option-label">Select Color:</label>
+            <select id="color-select" class="select-option">${colorOptions}</select>` : ''}
+            <button class="add-to-cart-btn" id="add-cart-btn">Add to Cart</button>
+        </div>
+        `;
 
-            // Initial cart count update
-            updateCartIndicator();
+        const thumbnailsContainer=document.getElementById('thumbnails');
+        galleryImages.forEach((src,index)=>{
+            const thumb=document.createElement('img');
+            thumb.src=src; thumb.className='thumb';
+            if(index===0) thumb.classList.add('active');
+            thumb.addEventListener('click',()=>updateMainImage(index));
+            thumbnailsContainer.appendChild(thumb);
         });
-    </script>
+
+        const variantSelect=document.getElementById('variant-select');
+        variantSelect.addEventListener('change',()=>{
+            const selectedOption=variantSelect.selectedOptions[0];
+            const price=parseFloat(selectedOption.dataset.price);
+            document.getElementById('product-price').textContent=price.toFixed(2)+' ₾';
+        });
+
+        const colorSelect=document.getElementById('color-select');
+        if(colorSelect){
+            colorSelect.addEventListener('change',()=>{
+                const selectedColor=colorSelect.selectedOptions[0];
+                currentColor=selectedColor.value;
+                document.getElementById('main-product-image').src=selectedColor.dataset.image;
+            });
+        }
+
+        document.getElementById('add-cart-btn').addEventListener('click',()=>{
+            addToCart(product.id, variantSelect.value, currentColor);
+        });
+
+        document.getElementById('prev-btn').addEventListener('click',()=>changeImage(-1));
+        document.getElementById('next-btn').addEventListener('click',()=>changeImage(1));
+
+        const mainImg=document.getElementById('main-product-image');
+        mainImg.addEventListener('click',()=>mainImg.classList.toggle('zoomed'));
+    }
+
+    function updateMainImage(index){
+        const galleryImages=[currentProduct.image,...(currentProduct.gallery||[])];
+        currentImageIndex=index;
+        const mainImg=document.getElementById('main-product-image');
+        mainImg.src=galleryImages[currentImageIndex];
+        mainImg.classList.remove('zoomed');
+        document.querySelectorAll('.thumb').forEach((thumb,i)=>thumb.classList.toggle('active',i===index));
+    }
+
+    function changeImage(direction){
+        const galleryImages=[currentProduct.image,...(currentProduct.gallery||[])];
+        let newIndex=currentImageIndex+direction;
+        if(newIndex<0) newIndex=galleryImages.length-1;
+        else if(newIndex>=galleryImages.length) newIndex=0;
+        updateMainImage(newIndex);
+    }
+
+    function renderProductGrid(products){
+        const grid=document.getElementById('product-grid'); grid.innerHTML='';
+        products.forEach(p=>{
+            const price=p.price + ((p.variants[0].priceadded??0));
+            const card=document.createElement('div');
+            card.className='product-card';
+            card.innerHTML=`
+                <a href="product.html?id=${p.id}">
+                    <img src="${p.image}" alt="${p.name}">
+                    <div class="product-info">
+                        <h3 class="product-name">${p.name}</h3>
+                        <p class="product-price">${price.toFixed(2)} ₾</p>
+                    </div>
+                </a>`;
+            grid.appendChild(card);
+        });
+    }
+
+    function renderTrendingSlider(products){
+        const slider=document.getElementById('trending-slider'); slider.innerHTML='';
+        products.forEach(p=>{
+            const price=p.price + ((p.variants[0].priceadded??0));
+            const card=document.createElement('div'); card.className='product-card';
+            card.innerHTML=`
+                <a href="product.html?id=${p.id}">
+                    <img src="${p.image}" alt="${p.name}">
+                    <div class="product-info">
+                        <h3 class="product-name">${p.name}</h3>
+                        <p class="product-price">${price.toFixed(2)} ₾</p>
+                    </div>
+                </a>`;
+            slider.appendChild(card);
+        });
+    }
+
+    document.getElementById('search-bar').addEventListener('input',e=>{
+        const term=e.target.value.toLowerCase();
+        const filtered=allProducts.filter(p=>p.id!==productId && (
+            p.name.toLowerCase().includes(term) ||
+            p.description.toLowerCase().includes(term) ||
+            (p.keywords && p.keywords.some(k=>k.toLowerCase().includes(term)))
+        ));
+        renderProductGrid(filtered);
+    });
+
+    updateCartIndicator();
+});
+</script>
 </body>
+
 </html>

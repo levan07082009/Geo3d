@@ -1,103 +1,187 @@
 [
   {
     "id": 1,
+    "display": "<a style='color: red;'> <strike> 100</strike></a> | <a style='color: green;'> 80 </a>",
     "name": "Darth vader ბიუსტი",
-    "price": 10,
     "description": "Turn your favorite photo into a stunning 3D printed lithophane. When backlit, your image comes to life with incredible detail. Perfect for gifts and keepsakes.",
-    "keywords": ["darth", "vader", "bust", "ბიუსტი", "დართ", "ვეიდერი"],
+    "price": 15,
     "image": "product_images/product1.png",
-    "gallery": ["product_images/product1_gallery1.png", "product_images/product1_gallery2.png"],
-    "trending": true
+    "gallery": ["product_images/product1_1.png","product_images/product1_2.png"],
+    "keywords": ["darth", "vader", "bust", "ბიუსტი", "დართ", "ვეიდერი", "სასაჩუქრე","ფასდაკლება"],
+    "trending": false,
+    "variants": [
+      { "name": "Full Bust (Black)", "priceadded": 0 },
+      { "name": "Full Bust (White)", "priceadded": 0 },
+      { "name": "Mini Bust (Black)", "priceadded": -5 },
+      { "name": "Mini Bust (White)", "priceadded": -5 }
+    ],
+    "colors": [
+      { "name": "Black", "image": "product_images/product1_black.png" },
+      { "name": "White", "image": "product_images/product1_white.png" }
+    ]
   },
   {
     "id": 2,
+    "display": "15",
     "name": "საფანქრე",
-    "price": 10,
     "description": "A flexible, articulated dragon that can be posed in countless ways. A fantastic desk toy or decorative piece for fantasy lovers.",
-    "keywords": ["ფანქარი", "საფანქრე", "ძრავი", "ძრავა", "ჩასადები"],
+    "price": 15,
     "image": "product_images/product2.png",
-    "gallery": ["product_images/product2_gallery1.png", "product_images/product2_gallery2.png"],
-    "trending": true
+    "gallery": ["product_images/product2_1.png","product_images/product2_2.png"],
+    "keywords": ["ფანქარი", "საფანქრე", "ძრავი", "ძრავა", "ჩასადები"],
+    "trending": false,
+    "variants": [
+      { "name": "Assembled", "priceadded": 0 },
+      { "name": "Separate Parts", "priceadded": -7 }
+    ],
+    "colors": [
+      { "name": "Red", "image": "product_images/product2_red.png" },
+      { "name": "Green", "image": "product_images/product2_green.png" },
+      { "name": "Blue", "image": "product_images/product2_blue.png" }
+    ]
   },
   {
     "id": 3,
+    "display": "20",
     "name": "კვერცხის შესანახი",
-    "price": 20,
     "description": "A beautiful and intricate vase designed with a Voronoi pattern. This modern piece is a guaranteed conversation starter and adds a touch of elegance to any room.",
-    "keywords": ["vase", "home", "decor", "voronoi", "modern"],
+    "price": 20,
     "image": "product_images/product3.png",
-    "gallery": ["product_images/product3_gallery1.png", "product_images/product3_gallery2.png"],
-    "trending": false
+    "gallery": ["product_images/product3_1.png","product_images/product3_2.png"],
+    "keywords": ["vase", "home", "decor", "voronoi", "modern"],
+    "trending": true,
+    "variants": [
+      { "name": "Standard", "priceadded": 0 },
+      { "name": "Custom Size", "priceadded": 5 }
+    ],
+    "colors": []
   },
   {
     "id": 4,
+    "display": "65",
     "name": "ironman-ის გულის რეაქტორი MK2",
-    "price": 40,
     "description": "Iron Man Arc Reactor MK2",
-    "keywords": ["iron", "man", "heart", "reactor", "arc", "რკინის", "კაცი", "რკინის კაცი", "ironman", "iron man", "გული", "რეაქტორი"],
+    "price": 65,
     "image": "product_images/product4.png",
-    "gallery": ["product_images/product4_gallery1.png", "product_images/product4_gallery2.png"],
-    "trending": false
+    "gallery": ["product_images/product4_1.png","product_images/product4_2.png"],
+    "keywords": ["iron", "man", "heart", "reactor", "arc", "რკინის", "კაცი", "რკინის კაცი", "ironman", "iron man", "გული", "რეაქტორი", "სასაჩუქრე"],
+    "trending": true,
+    "variants": [
+      { "name": "Assembled", "priceadded": 0 },
+      { "name": "Separate Parts", "priceadded": -30 }
+    ],
+    "colors": [
+      { "name": "Silver", "image": "product_images/product4_silver.png" },
+      { "name": "Gold", "image": "product_images/product4_gold.png" }
+    ]
   },
   {
     "id": 5,
+    "display": "15",
     "name": "ღვინის დამჭერი ხელი",
-    "price": 15.00,
     "description": "A clever and stylish self-watering planter. The two-part design provides a water reservoir to keep your plants happy and hydrated.",
-    "keywords": ["ხელი", "ღვინო", "დამჭერი", "home", "self-watering"],
+    "price": 15,
     "image": "product_images/product5.png",
-    "gallery": ["product_images/product5_gallery1.png", "product_images/product5_gallery2.png"],
-    "trending": false
+    "gallery": ["product_images/product5_1.png","product_images/product5_2.png"],
+    "keywords": ["ხელი", "ღვინო", "დამჭერი", "home", "self-watering"],
+    "trending": false,
+    "variants": [
+      { "name": "Single", "priceadded": 0 },
+      { "name": "Set of 2", "priceadded": 10 }
+    ],
+    "colors": [
+      { "name": "Brown", "image": "product_images/product5_brown.png" },
+      { "name": "Beige", "image": "product_images/product5_beige.png" }
+    ]
   },
   {
     "id": 6,
-    "name": "Headphone Stand",
-    "price": 18.75,
+    "display": "15",
+    "name": "ბიუსტი",
     "description": "A sleek and sturdy stand to store your headphones. Keeps your desk organized and prevents damage to your gear. Available in multiple colors.",
-    "keywords": ["headphone", "stand", "desk", "organizer", "gaming"],
+    "price": 15,
     "image": "product_images/product6.png",
-    "gallery": ["product_images/product6_gallery1.png", "product_images/product6_gallery2.png"],
-    "trending": false
+    "gallery": ["product_images/product6_1.png","product_images/product6_2.png"],
+    "keywords": ["headphone", "stand", "desk", "organizer", "gaming"],
+    "trending": true,
+    "variants": [
+      { "name": "Standard", "priceadded": 0 },
+      { "name": "Custom Engraving", "priceadded": 10 }
+    ],
+    "colors": [
+      { "name": "Black", "image": "product_images/product6_black.png" },
+      { "name": "White", "image": "product_images/product6_white.png" },
+      { "name": "Red", "image": "product_images/product6_red.png" }
+    ]
   },
   {
     "id": 7,
-    "name": "Custom Name Keychain",
-    "price": 9.99,
-    "description": "Personalize your keys with a custom 3D printed name keychain. A simple, durable, and thoughtful gift for anyone.",
-    "keywords": ["keychain", "custom", "name", "gift", "personalized"],
+    "display": "90",
+    "name": "თვითმფრინავის ძრავი",
+    "description": "Jet engine",
+    "price": 90,
     "image": "product_images/product7.png",
-    "gallery": ["product_images/product7_gallery1.png", "product_images/product7_gallery2.png"],
-    "trending": false
+    "gallery": ["product_images/product7_1.png","product_images/product7_2.png"],
+    "keywords": ["jet", "engine", "ძრავი", "ძრავა", "ჯეტ", "სასაჩუქრე"],
+    "trending": true,
+    "variants": [
+      { "name": "Miniature", "priceadded": 0 },
+      { "name": "Full Size", "priceadded": 110 }
+    ],
+    "colors": []
   },
   {
     "id": 8,
-    "name": "Cable Management Clips (10 pcs)",
-    "price": 12.50,
+    "display": "12.5",
+    "name": "ლეპტოპის დასადები",
     "description": "Tame the cable chaos behind your desk or TV with this set of 10 durable cable management clips. Easy to install and incredibly useful.",
-    "keywords": ["cable", "organizer", "clips", "desk", "tech"],
+    "price": 12.5,
     "image": "product_images/product8.png",
-    "gallery": ["product_images/product8_gallery1.png", "product_images/product8_gallery2.png"],
-    "trending": false
+    "gallery": ["product_images/product8_1.png","product_images/product8_2.png"],
+    "keywords": ["დასადები", "ლეპტოპის", "მაგიდა", "desk", "laptop", "stand"],
+    "trending": false,
+    "variants": [
+      { "name": "Set of 10", "priceadded": 0 },
+      { "name": "Set of 20", "priceadded": 7.5 }
+    ],
+    "colors": []
   },
   {
     "id": 9,
-    "name": "Flexi-Rex Dinosaur",
-    "price": 14.00,
+    "display": "14",
+    "name": "ყურსასმენის დასადები",
     "description": "A classic 3D print, the Flexi-Rex is a fun, flexible Tyrannosaurus Rex toy that can stand on its own. Kids and adults love it!",
-    "keywords": ["dinosaur", "toy", "flexi", "rex", "kids"],
+    "price": 14,
     "image": "product_images/product9.png",
-    "gallery": ["product_images/product9_gallery1.png", "product_images/product9_gallery2.png"],
-    "trending": false
+    "gallery": ["product_images/product9_1.png","product_images/product9_2.png"],
+    "keywords": ["ყურსასმენის","ყურსასმენი", "დასადები", "headphone", "stand", "desk", "მაგიდა", "სასაჩუქრე"],
+    "trending": false,
+    "variants": [
+      { "name": "Standard", "priceadded": 0 },
+      { "name": "Custom", "priceadded": 6 }
+    ],
+    "colors": [
+      { "name": "Black", "image": "product_images/product9_black.png" },
+      { "name": "White", "image": "product_images/product9_white.png" }
+    ]
   },
   {
     "id": 10,
-    "name": "Modular Desk Organizer",
-    "price": 22.00,
+    "display": "8",
+    "name": "ყურსასმენის საკიდი",
     "description": "A customizable modular organizer for your desk. Arrange the different compartments to perfectly fit your pens, notes, and other supplies.",
-    "keywords": ["desk", "organizer", "modular", "office", "pen holder"],
+    "price": 8,
     "image": "product_images/product10.png",
-    "gallery": ["product_images/product10_gallery1.png", "product_images/product10_gallery2.png"],
-    "trending": false
+    "gallery": ["product_images/product10_1.png","product_images/product10_2.png"],
+    "keywords": ["ყურსასმენის","ყურსასმენი", "საკიდი", "headphones", "hanger", "desk", "მაგიდა"],
+    "trending": false,
+    "variants": [
+      { "name": "Standard", "priceadded": 0 },
+      { "name": "Custom", "priceadded": 4 }
+    ],
+    "colors": [
+      { "name": "Black", "image": "product_images/product10_black.png" },
+      { "name": "White", "image": "product_images/product10_white.png" }
+    ]
   }
-  
 ]
